@@ -17,16 +17,20 @@
 package org.jboss.as.quickstarts.temperatureconverter.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.jboss.as.quickstarts.temperatureconverter.ejb.Scale;
 import org.jboss.as.quickstarts.temperatureconverter.ejb.Temperature;
 import org.jboss.as.quickstarts.temperatureconverter.ejb.TemperatureConvertEJB;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 /**
  * A simple managed bean that is used to invoke the TemperatureConvertEJB and store the response. The response is obtained by
@@ -37,7 +41,7 @@ import org.jboss.as.quickstarts.temperatureconverter.ejb.TemperatureConvertEJB;
  * @author Bruce Wolfe
  */
 @SuppressWarnings("serial")
-@Named("temperatureConverter")
+@ManagedBean( name = "temperatureConverter" )
 @RequestScoped
 public class TemperatureConverter implements Serializable {
 
@@ -55,6 +59,29 @@ public class TemperatureConverter implements Serializable {
     private String sourceTemperature = "0.0";
 
     private Scale defaultScale = Scale.CELSIUS;
+
+	private Date date1;
+
+	public void onDateSelect( SelectEvent event ) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		SimpleDateFormat format = new SimpleDateFormat( "dd/MM/yyyy" );
+		facesContext.addMessage( null,
+				new FacesMessage( FacesMessage.SEVERITY_INFO, "Date Selected", format.format( event.getObject() ) ) );
+	}
+
+	public void click() {
+		PrimeFaces.current().ajax().update( "form:display" );
+		PrimeFaces.current().executeScript( "PF('dlg').show()" );
+	}
+
+	public Date getDate1() {
+		return date1;
+	}
+
+	public void setDate1( Date date1 ) {
+		this.date1 = date1;
+	}
+
 
     /**
      * Invoke temperatureConvertEJB.convert() and store the temperature

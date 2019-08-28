@@ -16,10 +16,10 @@
  */
 package org.jboss.as.quickstarts.temperatureconverter.controller;
 
+import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.inject.Named;
 
 import org.jboss.as.quickstarts.temperatureconverter.ejb.Scale;
 
@@ -29,7 +29,7 @@ import org.jboss.as.quickstarts.temperatureconverter.ejb.Scale;
  * @author Pete Muir
  *
  */
-@Named
+@ManagedBean
 public class ScaleConverter implements Converter {
 
     public Scale[] getScales() {

@@ -15,51 +15,120 @@
     limitations under the License.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
-<head>
+<h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>temperature-converter</title>
-</head>
 
-<body>
+<script type="text/javascript">    
+    PrimeFaces.locales['de'] = {
+        closeText: 'Schlieben',
+        prevText: 'Zurbck',
+        nextText: 'Weiter',
+        monthNames: ['Januar', 'Februar', 'Marz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+        monthNamesShort: ['Jan', 'Feb', 'Marz', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+        dayNames: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+        dayNamesShort: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam'],
+        dayNamesMin: ['S', 'M', 'D', 'M ', 'D', 'F ', 'S'],
+        weekHeader: 'Woche',
+        FirstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        timeOnlyTitle: 'Nur Zeit',
+        timeText: 'Zeit',
+        hourText: 'Stunde',
+        minuteText: 'Minute',
+        secondText: 'Sekunde',
+        currentText: 'Aktuelles Datum',
+        ampm: false,
+        month: 'Monat',
+        week: 'Woche',
+        day: 'Tag',
+        allDayText: 'Ganzer Tag'
+    };
+</script>
 
-    <h1>JBoss EAP Temperature Converter Service</h1>
-    <p>Enter the temperature you wish to convert. 
-    Then click <b>C</b> for Celsius or <b>F</b> for Fahrenheit to choose the temperature scale.
-    </p>
-    <div id="container">
-        <h:form id="convertForm">
-            <h:panelGrid columns="2">
-                <h:outputLabel for="radio">Scale (default):</h:outputLabel>
-                <h:selectOneRadio value="#{temperatureConverter.defaultScale}" id="radio" converter="#{scaleConverter}">
-                    <f:selectItems value="#{scaleConverter.scales}" var="scale" itemLabel="#{scale.symbol}" itemValue="#{scale}" />
-                </h:selectOneRadio>
-                <h:outputLabel for="sourceTemperature">Temperature:</h:outputLabel>
-                <h:inputText id="sourceTemperature" value="#{temperatureConverter.sourceTemperature}" />
-                <h:commandButton id="convert" value="Convert" action="#{temperatureConverter.convert}" />
-                <h:messages />
-            </h:panelGrid>
-        </h:form>
-        <h:form id="response">
-            <h:panelGrid columns="2">
-                <h:outputLabel for="temperature">Converts to:</h:outputLabel>
-                <h:outputLabel id="temperature" value="#{temperatureConverter.temperature}" />
-            </h:panelGrid>
-        </h:form>
-        <hr />
-        <p>How the temperature conversion works:</p>
-        <ul>
-            <li>The input temperature string is parsed using a regular expression that expects a floating point number.
-        The parsed temperature value is combined with the selected or default temperature scale to convert the temperature to 
-        the new scale.</li>
-            <li>If the input temperature is null or can not be converted, an error message is displayed and 'Invalid temperature' is 
-        returned for the result.</li>
-            <li>Both the parsed input temperature and the resulting converted temperature are truncated to 3 decimal places.</li>
-        </ul>
+<style type="text/css">
+    .value {
+        font-weight: bold;
+    }
+</style>
 
-    </div>
+</h:head>
 
-</body>
+<h:body>
+
+	<h1>JBoss EAP Temperature Converter Service</h1>
+	<p>
+		Enter the temperature you wish to convert. Then click <b>C</b> for
+		Celsius or <b>F</b> for Fahrenheit to choose the temperature scale.
+	</p>
+	<div id="container">
+		<h:form id="convertForm">
+			<h:panelGrid columns="2">
+				<h:outputLabel for="radio">Scale (default):</h:outputLabel>
+				<h:selectOneRadio value="#{temperatureConverter.defaultScale}"
+					id="radio" converter="#{scaleConverter}">
+					<f:selectItems value="#{scaleConverter.scales}" var="scale"
+						itemLabel="#{scale.symbol}" itemValue="#{scale}" />
+				</h:selectOneRadio>
+				<h:outputLabel for="sourceTemperature">Temperature:</h:outputLabel>
+				<h:inputText id="sourceTemperature"
+					value="#{temperatureConverter.sourceTemperature}" />
+				<h:commandButton id="convert" value="Convert"
+					action="#{temperatureConverter.convert}" />
+				<h:messages />
+			</h:panelGrid>
+		</h:form>
+		<h:form id="response">
+			<h:panelGrid columns="2">
+				<h:outputLabel for="temperature">Converts to:</h:outputLabel>
+				<h:outputLabel id="temperature"
+					value="#{temperatureConverter.temperature}" />
+			</h:panelGrid>
+		</h:form>
+		<hr />
+		<p>How the temperature conversion works:</p>
+		<ul>
+			<li>The input temperature string is parsed using a regular
+				expression that expects a floating point number. The parsed
+				temperature value is combined with the selected or default
+				temperature scale to convert the temperature to the new scale.</li>
+			<li>If the input temperature is null or can not be converted, an
+				error message is displayed and 'Invalid temperature' is returned for
+				the result.</li>
+			<li>Both the parsed input temperature and the resulting
+				converted temperature are truncated to 3 decimal places.</li>
+		</ul>
+
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<p:outputLabel for="inline" value="Inline:" />
+				<p:calendar id="inline" value="#{temperatureConverter.date1}" mode="inline" />
+			</h:panelGrid>
+
+			<p:commandButton value="Submit" update="msgs"
+				action="#{temperatureConverter.click}" icon="pi pi-check" />
+
+			<p:dialog modal="true" resizable="false" header="Values"
+				widgetVar="dlg" showEffect="fold" draggable="false">
+				<p:panelGrid id="display" columns="2" columnClasses="label,value">
+					<h:outputText value="Inline:" />
+					<h:outputText value="#{temperatureConverter.date1}">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+				</p:panelGrid>
+			</p:dialog>
+		</h:form>
+	</div>
+
+</h:body>
 </html>
